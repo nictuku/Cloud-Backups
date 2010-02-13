@@ -1,0 +1,19 @@
+This software comes with no guarantees. Use at your own risk.
+
+= Build instructions
+Use gobuild[1] to build the project tools.
+
+$ cd src ; gobuild delicious.go
+
+= How to use
+Just call the respective utility and it will try to save a backup for you.
+The default storage directory is $HOME/cloudbackups.
+
+Examples:
+$ delicious -user=<user> -password=<password>
+
+For more options, run:
+$ delicious -h
+
+Good luck!
+- Yves Junqueira
