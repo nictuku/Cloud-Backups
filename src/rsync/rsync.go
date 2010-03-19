@@ -30,9 +30,10 @@ func Rsync(source string, user string, host string, dest string) (err os.Error) 
 		log.Stderrf("rsync command not found (%s)\n", err)
 		return
 	}
+	cmdArguments := []string{r_path, "-az", source, user + "@" + host + ":" + dest}
 	// MergeWithStdout makes error messages disappear.
-	cmd, err := exec.Run(r_path, []string{r_path, "-az", source, user + "@" + host + ":" + dest},
-		os.Environ(), exec.DevNull, exec.DevNull, exec.Pipe)
+	cmd, err := exec.Run(r_path, cmdArguments, os.Environ(), "",
+		exec.DevNull, exec.DevNull, exec.Pipe)
 	// I love this in Go...
 	defer cmd.Close()
 	// .. but, man, these error checks look ugly.
@@ -49,10 +50,13 @@ func Rsync(source string, user string, host string, dest string) (err os.Error) 
 	if err != nil {
 		log.Stderrf("Error reading from stderr (%s)\n", err)
 	}
-	log.Stdout(string(buf))
+	if len(buf) > 0 {
+		log.Stdout(string(buf))
+	}
 	if waitmsg.ExitStatus() != 0 {
 		log.Stderrf("rsync returned with an error status (%s)\n", waitmsg)
 		return
 	}
+	log.Stderrf("All happy.\n")
 	return
 }
