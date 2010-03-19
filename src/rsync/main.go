@@ -21,14 +21,25 @@ import (
 	"./rsync"
 )
 
-var src *string = flag.String("source", "", "Source file or directory")
-var destUser *string = flag.String("dest-user", "", "Destination user")
-var destHost *string = flag.String("dest-host", "", "Destination host")
-var destFile *string = flag.String("dest-file", "", "Destination file or directory")
+var src string
+var destUser string
+var destHost string
+var destFile string
+
+func init() {
+	flag.StringVar(&src, "source", "", "Source file or directory")
+	flag.StringVar(&destUser, "dest-user", "", "Destination user")
+	flag.StringVar(&destHost, "dest-host", "", "Destination host")
+	flag.StringVar(&destFile, "dest-file", "", "Destination file or directory")
+}
 
 func main() {
 	flag.Parse()
-	if err := rsync.Rsync(*src, *destUser, *destHost, *destFile); err != nil {
+	if destUser == "" || destHost == "" || destFile == "" || src == "" {
+		flag.Usage()
+		return
+	}
+	if err := rsync.Rsync(src, destUser, destHost, destFile); err != nil {
 		log.Stderr("Rsync() err %v\n", err)
 	}
 }
