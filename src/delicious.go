@@ -69,8 +69,7 @@ func main() {
 		flag.Usage()
 		os.Exit(2)
 	}
-	split := strings.Split(*deliciousUrl, "http://", 0)[1:]
-	userInfo := strings.Join(split, "")
+	userInfo := strings.Split(*deliciousUrl, "http://", 2)[1]
 	url := fmt.Sprintf("http://%s:%s@%s", *deliciousUser, *deliciousPassword, userInfo)
 
 	b, err := readData(url)
